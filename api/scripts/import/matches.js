@@ -9,12 +9,12 @@ async function importMatches() {
     try {
         console.log('Connecting to MongoDB...');
         
-        // Wait for connection
-        await new Promise(resolve => setTimeout(resolve, 2000));
+        // Wait until the database connection is open
+        await mongoose.connection.asPromise();
         
         console.log('Clearing existing games...');
-        // Drop the games collection
-        await mongoose.connection.db.dropCollection('games').catch(() => {
+        // Drop the collection via the model
+        await Game.collection.drop().catch(() => {
             console.log('Collection does not exist yet, will create new one');
         });
         
