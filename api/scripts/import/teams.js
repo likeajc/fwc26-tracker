@@ -30,6 +30,7 @@ async function importTeams() {
             const teamData = {
                 id: item.id,
                 name_en: item.name_en,
+                common_name: item.common_name,
                 name_fa: item.name_fa,
                 flag: item.flag || '',
                 fifa_code: item.fifa_code,
