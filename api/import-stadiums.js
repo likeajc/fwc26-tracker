@@ -30,6 +30,7 @@ async function importStadiums() {
                 name_en: item.name_en,
                 name_fa: item.name_fa,
                 fifa_name: item.fifa_name,
+                official_name: item.official_name,
                 city_en: item.city_en,
                 city_fa: item.city_fa,
                 country_en: item.country_en,
