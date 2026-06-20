@@ -11,6 +11,33 @@ with live score updates. Built with Express + MongoDB, documented with Swagger.
 - **Live updater** (`scripts/auto-updater.js`) that polls a Persian livescore
   feed and writes scores, scorers and recalculated standings into MongoDB
 
+## Project structure
+
+```
+api/
+├── index.js                 # app entry (Express server)
+├── swagger.js               # OpenAPI/Swagger definition
+├── config/                  # environment configuration
+├── database/                # MongoDB (Mongoose) connection
+├── middleware/              # auth (JWT) middleware
+├── models/                  # Mongoose schemas (team, group, game, stadium, user)
+├── controllers/             # route handlers (get, data, auth, squads, health)
+├── scripts/
+│   ├── auto-updater.js      # live score/scorer updater
+│   ├── match-player.js      # Persian → FIFA name fuzzy matcher
+│   └── import/              # one-off DB seeders (groups, teams, stadiums, matches)
+├── data/
+│   ├── seed/                # import sources (teams, stadiums, matches, groups)
+│   ├── team-name-map.json   # Persian → FIFA team names
+│   ├── player-names.json    # Persian → FIFA player names
+│   ├── player-ids.json      # feed id → FIFA player names
+│   ├── squads.json          # official 48 squads
+│   ├── auto-matched-players.json  # fuzzy-match audit log (runtime)
+│   └── unmapped-players.json      # unresolved scorers queue (runtime)
+├── ecosystem.config.js      # PM2 (API + updater)
+└── Procfile                 # web + worker
+```
+
 ## Setup
 
 ```bash
@@ -66,10 +93,10 @@ Team and stadium data carry official FIFA names alongside the source-language
 (Persian) names used by the live feed:
 
 - `data/team-name-map.json` — source team name → official FIFA English name
-- `football.teams.json` / `football.stadiums.json` — `name_en`, `name_fa` and,
-  for venues, the official `fifa_name`
+- `data/seed/teams.json` / `data/seed/stadiums.json` — `name_en`, `name_fa`
+  and, for venues, the official `fifa_name`
 - `data/squads.json` — official 26-player squads for all 48 teams (1,248
-  players), keyed by the same `name_en` used in `football.teams.json`. Served
+  players), keyed by the same `name_en` used in `data/seed/teams.json`. Served
   via `/get/squads`. Compiled from the official tournament squad lists; this is
   the authoritative reference of official FIFA player-name spellings.
 
