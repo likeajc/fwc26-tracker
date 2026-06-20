@@ -10,6 +10,9 @@ const TeamSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    common_name: {
+        type: String
+    },
     name_fa: {
         type: String,
         required: true
