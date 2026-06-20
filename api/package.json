@@ -7,8 +7,6 @@
     "start": "node index.js",
     "dev": "cross-env NODE_ENV=development nodemon index.js",
     "prod": "cross-env NODE_ENV=production node index.js",
-    "start:dev": "cross-env NODE_ENV=development nodemon index.js",
-    "start:prod": "cross-env NODE_ENV=production node index.js",
     "import:all": "node import-groups.js && node import-teams.js && node import-stadiums.js && node import-matches.js",
     "import:groups": "node import-groups.js",
     "import:teams": "node import-teams.js",
@@ -54,7 +52,6 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "axios": "^1.13.4",
     "bcrypt": "^5.0.1",
     "body-parser": "^1.19.1",
     "compression": "^1.8.1",
