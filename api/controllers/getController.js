@@ -271,22 +271,15 @@ router.get('/team', async(req,res) => {
 });
 
 router.get('/teams', async(req,res) => {
-    console.log('GET /teams called');
     try{
         let teams;
-        console.log('Query params:', req.query);
         if(req.query.group) {
-            console.log('Filtering by group:', req.query.group);
             teams = await Team.find({groups: req.query.group.toUpperCase()}).lean();
         } else {
-            console.log('Getting all teams...');
             teams = await Team.find({}).lean();
-            console.log('Found teams:', teams.length);
         }
-        console.log('Sending response...');
         return res.status(200).json({teams});
     }catch(err){
-        console.error('ERROR in /get/teams:', err);
         return res.status(400).json({
             error: 'Error getting all teams',
             details: err.message
