@@ -1,8 +1,9 @@
 require('dotenv').config();
-const mongoose = require('./database');
-const Game = require('./models/game');
-const Team = require('./models/team');
+const mongoose = require('../../database');
+const Game = require('../../models/game');
+const Team = require('../../models/team');
 const fs = require('fs');
+const path = require('path');
 
 async function importMatches() {
     try {
@@ -19,7 +20,7 @@ async function importMatches() {
         
         console.log('Reading matches file...');
         const matchesData = JSON.parse(
-            fs.readFileSync('./football.matches.json', 'utf8')
+            fs.readFileSync(path.join(__dirname, '../../data/seed/matches.json'), 'utf8')
         );
         
         console.log(`Found ${matchesData.length} matches to import`);
@@ -29,7 +30,7 @@ async function importMatches() {
         console.log(`Found ${teams.length} teams in database`);
         
         if (teams.length === 0) {
-            console.error('❌ No teams found! Please import teams first using: node import-teams.js');
+            console.error('❌ No teams found! Please import teams first using: npm run import:teams');
             process.exit(1);
         }
         
