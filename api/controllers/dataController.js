@@ -36,7 +36,7 @@ router.put('/group/:idGroup', async(req,res) => {
         const group = await Group.findByIdAndUpdate(req.params.idGroup, req.body, {new: true});
         return res.send({group});
     }catch(err){
-        console.log(err)
+        console.error(err);
         return res.status(400).send({
             error: 'Error editing group'
         });
@@ -134,7 +134,7 @@ router.post('/game', async(req,res) => {
 
         return res.send({game});
     }catch(err){
-        console.log(err)
+        console.error(err);
         return res.status(400).send({
             error: 'Error creating game'
         });

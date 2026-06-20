@@ -1,39 +1,53 @@
 # FWC26 Tracker — API
 
-REST API for the FIFA World Cup 2026 (48 teams, 12 groups, 104 matches, 16 stadiums)
-with live score updates. Built with Express + MongoDB, documented with Swagger.
+REST API for the **FIFA World Cup 2026**. It serves the full tournament dataset
+(teams, groups, matches, stadiums and squads), keeps live scores up to date from
+a Persian livescore feed, and presents every name in its **official FIFA**
+spelling.
 
-## Stack
+Built with Express + MongoDB, documented with Swagger.
 
-- **Express** HTTP API with `helmet`, `cors`, rate limiting and compression
-- **MongoDB** (via Mongoose) for teams, groups, matches and stadiums
-- **Swagger UI** at `/api-docs` (enabled in development)
-- **Live updater** (`scripts/auto-updater.js`) that polls a Persian livescore
-  feed and writes scores, scorers and recalculated standings into MongoDB
+## Highlights
+
+- **Complete tournament data** — 48 teams, 12 groups, 104 matches, 16 stadiums.
+- **Official FIFA names everywhere**
+  - Teams carry the official FIFA name (e.g. *Korea Republic*, *Côte d'Ivoire*,
+    *Türkiye*), with the everyday name kept alongside.
+  - Stadiums use the `FIFA Name (Official Name)` form, e.g. *Toronto Stadium
+    (BMO Field)*.
+  - Players use official FIFA spellings.
+- **Official squads** — the 26-player squad for every team (1,248 players),
+  served over the API.
+- **Live updates** — a background updater pulls live scores and goalscorers and
+  recalculates group standings.
+- **Persian → FIFA name translation** — scorer names arrive in Persian and are
+  resolved to their official FIFA name (dictionaries + squad-aware fuzzy match).
+- **Tested** — data-integrity, matcher and API integration tests.
 
 ## Project structure
 
 ```
 api/
-├── index.js                 # app entry (Express server)
+├── index.js                 # Express app entry
 ├── swagger.js               # OpenAPI/Swagger definition
 ├── config/                  # environment configuration
 ├── database/                # MongoDB (Mongoose) connection
-├── middleware/              # auth (JWT) middleware
+├── middleware/              # JWT auth
 ├── models/                  # Mongoose schemas (team, group, game, stadium, user)
-├── controllers/             # route handlers (get, data, auth, squads, health)
+├── controllers/             # routes (get, data, auth, squads, health)
 ├── scripts/
-│   ├── auto-updater.js      # live score/scorer updater
+│   ├── auto-updater.js      # live score / scorer updater
 │   ├── match-player.js      # Persian → FIFA name fuzzy matcher
-│   └── import/              # one-off DB seeders (groups, teams, stadiums, matches)
+│   └── import/              # database seeders (groups, teams, stadiums, matches)
 ├── data/
 │   ├── seed/                # import sources (teams, stadiums, matches, groups)
+│   ├── squads.json          # official 48 squads (1,248 players)
 │   ├── team-name-map.json   # Persian → FIFA team names
 │   ├── player-names.json    # Persian → FIFA player names
 │   ├── player-ids.json      # feed id → FIFA player names
-│   ├── squads.json          # official 48 squads
-│   ├── auto-matched-players.json  # fuzzy-match audit log (runtime)
-│   └── unmapped-players.json      # unresolved scorers queue (runtime)
+│   ├── auto-matched-players.json   # fuzzy-match audit log (runtime)
+│   └── unmapped-players.json       # unresolved scorers queue (runtime)
+├── test/                    # node:test suites
 ├── ecosystem.config.js      # PM2 (API + updater)
 └── Procfile                 # web + worker
 ```
@@ -42,93 +56,86 @@ api/
 
 ```bash
 npm install
-cp .env.example .env.development   # then edit values
-npm run import:all                 # seed teams, groups, stadiums, matches
-npm run dev                        # start API on http://localhost:3050
+cp .env.example .env.development   # then set the values
+npm run import:all                 # seed groups, teams, stadiums, matches
+npm run dev                        # start the API on http://localhost:3050
 ```
 
-To run live updates during the tournament:
+Live updates during the tournament:
 
 ```bash
 npm run update:live
 ```
 
-## Deployment (process manager)
+## Endpoints
 
-For a long-running deployment, use the bundled [PM2](https://pm2.keymetrics.io/)
-config (`ecosystem.config.js`), which runs the API and the live updater as two
+Public (no auth):
+
+| Method & path            | Description                                   |
+|--------------------------|-----------------------------------------------|
+| `GET /get/teams`         | 48 teams (optional `?group=A`)                |
+| `GET /get/groups`        | 12 groups / standings                         |
+| `GET /get/games`         | 104 matches with live scores and scorers      |
+| `GET /get/stadiums`      | 16 venues                                      |
+| `GET /get/squads`        | official squads for all 48 teams              |
+| `GET /get/squad/:team`   | one team's squad, e.g. `/get/squad/Brazil`    |
+
+Other:
+
+- `GET /api-docs` — Swagger UI (enabled in development).
+- `POST /auth/...` — registration / login (returns a JWT).
+- `/data/...` — admin write routes (require a JWT and an access code).
+
+## Data & names
+
+- **Teams** — `name_en` is the official FIFA name; `common_name` is the everyday
+  name; `name_fa` is the Persian name used by the feed.
+- **Stadiums** — `name_en` is `FIFA Name (Official Name)`, with separate
+  `fifa_name` and `official_name` fields.
+- **Squads** (`data/squads.json`) — keyed by team name, ordered alphabetically
+  by team and by player; the authoritative reference of official FIFA player
+  spellings.
+
+### Scorer name resolution
+
+Scorer names from the feed are Persian; the updater resolves each one, in order:
+
+1. **Persian dictionary** — `data/player-names.json`.
+2. **Feed id** — `data/player-ids.json`.
+3. **Squad fuzzy match** — the Persian name is matched against only the ~26
+   players of the side that scored (transliteration + consonant-skeleton
+   similarity), accepted only on a confident, unambiguous match. Auto-matches
+   are logged to `data/auto-matched-players.json` for review.
+4. **Fallback** — unresolved names are shown as-is and queued in
+   `data/unmapped-players.json` for one-time mapping.
+
+The curated dictionaries always take precedence; guessed names are never written
+into them automatically.
+
+## Deployment
+
+A [PM2](https://pm2.keymetrics.io/) config runs the API and the updater as two
 managed, auto-restarting services:
 
 ```bash
 npm run pm:start     # start API + updater
 npm run pm:logs      # tail logs
-npm run pm:restart   # restart both
 npm run pm:stop      # stop both
 ```
 
-The updater self-polls every `POLL_INTERVAL` ms; PM2 keeps it alive and restarts
-it with a short backoff if it ever crashes. Set `MONGODB_URL` and the secrets
-from `.env.example` in the environment before starting. A `Procfile` (`web` +
-`worker`) is also provided for Heroku-style platforms.
+A `Procfile` (`web` + `worker`) is provided for Heroku-style platforms. The
+updater needs outbound access to the livescore feed (`web-api.varzesh3.com`).
 
-> Note: the live updater needs outbound access to the Persian livescore feed
-> (`web-api.varzesh3.com`). Make sure your host/network allows it.
+## Tests
 
-## Endpoints
+```bash
+npm test            # data integrity + matcher + API integration
+npm run test:unit   # data integrity + matcher only (no database needed)
+```
 
-Public (no auth):
+The API integration tests seed a database and exercise every endpoint; they skip
+automatically when MongoDB is unavailable.
 
-- `GET /get/teams` — 48 teams
-- `GET /get/groups` — 12 group standings
-- `GET /get/games` — 104 matches (live scores + scorers)
-- `GET /get/stadiums` — 16 venues
-- `GET /get/squads` — official 26-player squads for all 48 teams
-- `GET /get/squad/:team` — one team's squad (by English name, e.g. `/get/squad/Brazil`)
+## Tech stack
 
-Admin/write endpoints under `/data` require a JWT (see `/auth`) plus an access code.
-
-## Names & translations
-
-Team and stadium data carry official FIFA names alongside the source-language
-(Persian) names used by the live feed:
-
-- `data/team-name-map.json` — source team name → official FIFA English name
-- `data/seed/teams.json` / `data/seed/stadiums.json` — `name_en`, `name_fa`
-  and, for venues, the official `fifa_name`
-- `data/squads.json` — official 26-player squads for all 48 teams (1,248
-  players), keyed by the same `name_en` used in `data/seed/teams.json`. Served
-  via `/get/squads`. Compiled from the official tournament squad lists; this is
-  the authoritative reference of official FIFA player-name spellings.
-
-### Player names
-
-Scorer names from the feed arrive in Persian and are translated to their
-official FIFA spelling. Two dictionaries drive this:
-
-- `data/player-names.json` — **Persian name → official FIFA name** (primary).
-  Example: `"وینیسیوس جونیور": "Vinícius Júnior"`.
-- `data/player-ids.json` — **feed numeric id → official FIFA name** (precise
-  fallback used when the Persian name isn't in the dictionary).
-
-Matching is resilient to invisible joiners (ZWNJ) and Arabic vs Persian letter
-variants, so spellings don't have to be byte-identical to the feed.
-
-When the updater resolves a scorer it tries, in order:
-
-1. **Persian dictionary** — `data/player-names.json`.
-2. **Feed id** — `data/player-ids.json`.
-3. **Squad fuzzy match** — the scorer's Persian name is matched against only the
-   ~26 players of the squad of the side that scored (from `data/squads.json`).
-   The name is transliterated and compared by consonant skeleton; a match is
-   accepted only when it scores high and clearly beats the next candidate, so it
-   never guesses between similar names. Auto-matches are logged to
-   `data/auto-matched-players.json` (`feed name -> { official, score, id }`) for
-   audit. Narrowing to one squad makes this both accurate and safe.
-4. **Harvest** — anything still unresolved shows the feed's Persian name and is
-   appended to `data/unmapped-players.json` as
-   `"<exact Persian name>": { "id": "...", "official": "" }`.
-
-To make a name official (or override a fuzzy auto-match), put it in
-`data/player-names.json` with the official FIFA spelling; that dictionary takes
-precedence over everything else. Guessed names are never written into the
-curated dictionaries automatically — fuzzy results stay in the audit file.
+Node.js · Express · MongoDB (Mongoose) · Swagger / OpenAPI · PM2 · `node:test`.
