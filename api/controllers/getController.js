@@ -5,7 +5,6 @@ const Group = require('../models/group');
 const Team = require('../models/team');
 const Game = require('../models/game');
 const Stadium = require('../models/stadium');
-const MatchTable = require('../models/matchTable');
 
 // Cache for teams (static data)
 let teamsCache = null;

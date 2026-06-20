@@ -189,63 +189,6 @@ const options = {
             }
           }
         },
-        MatchTable: {
-          type: 'object',
-          properties: {
-            _id: {
-              type: 'string',
-              description: 'Match table ID'
-            },
-            group: {
-              type: 'string',
-              description: 'Group name (A-L)'
-            },
-            teams: {
-              type: 'array',
-              items: {
-                type: 'object',
-                properties: {
-                  team_id: {
-                    type: 'string',
-                    description: 'Team ID'
-                  },
-                  mp: {
-                    type: 'number',
-                    description: 'Matches played'
-                  },
-                  w: {
-                    type: 'number',
-                    description: 'Wins'
-                  },
-                  d: {
-                    type: 'number',
-                    description: 'Draws'
-                  },
-                  l: {
-                    type: 'number',
-                    description: 'Losses'
-                  },
-                  gf: {
-                    type: 'number',
-                    description: 'Goals for'
-                  },
-                  ga: {
-                    type: 'number',
-                    description: 'Goals against'
-                  },
-                  gd: {
-                    type: 'number',
-                    description: 'Goal difference'
-                  },
-                  pts: {
-                    type: 'number',
-                    description: 'Points'
-                  }
-                }
-              }
-            }
-          }
-        },
         Error: {
           type: 'object',
           properties: {
