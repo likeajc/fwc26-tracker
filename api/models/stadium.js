@@ -17,6 +17,9 @@ const StadiumSchema = new mongoose.Schema({
     fifa_name: {
         type: String
     },
+    official_name: {
+        type: String
+    },
     city_en: {
         type: String,
         required: true

@@ -1,10 +1,13 @@
 [
   {
-    "_id": { "$oid": "679c9c8a5749c4077500f001" },
+    "_id": {
+      "$oid": "679c9c8a5749c4077500f001"
+    },
     "id": "1",
-    "name_en": "Estadio Azteca",
+    "name_en": "Mexico City Stadium (Estadio Azteca)",
     "name_fa": "استادیوم آزتکا",
     "fifa_name": "Mexico City Stadium",
+    "official_name": "Estadio Azteca",
     "city_en": "Mexico City",
     "city_fa": "مکزیکوسیتی",
     "country_en": "Mexico",
@@ -13,11 +16,14 @@
     "region": "Central"
   },
   {
-    "_id": { "$oid": "679c9c8a5749c4077500f002" },
+    "_id": {
+      "$oid": "679c9c8a5749c4077500f002"
+    },
     "id": "2",
-    "name_en": "Estadio Akron",
+    "name_en": "Estadio Guadalajara (Estadio Akron)",
     "name_fa": "استادیوم آکرون",
     "fifa_name": "Estadio Guadalajara",
+    "official_name": "Estadio Akron",
     "city_en": "Guadalajara (Zapopan)",
     "city_fa": "گوادالاخارا",
     "country_en": "Mexico",
@@ -26,11 +32,14 @@
     "region": "Central"
   },
   {
-    "_id": { "$oid": "679c9c8a5749c4077500f003" },
+    "_id": {
+      "$oid": "679c9c8a5749c4077500f003"
+    },
     "id": "3",
-    "name_en": "Estadio BBVA",
+    "name_en": "Estadio Monterrey (Estadio BBVA)",
     "name_fa": "استادیوم بی‌بی‌وی‌ای",
     "fifa_name": "Estadio Monterrey",
+    "official_name": "Estadio BBVA",
     "city_en": "Monterrey (Guadalupe)",
     "city_fa": "مونتری",
     "country_en": "Mexico",
@@ -39,11 +48,14 @@
     "region": "Central"
   },
   {
-    "_id": { "$oid": "679c9c8a5749c4077500f004" },
+    "_id": {
+      "$oid": "679c9c8a5749c4077500f004"
+    },
     "id": "4",
-    "name_en": "AT&T Stadium",
+    "name_en": "Dallas Stadium (AT&T Stadium)",
     "name_fa": "استادیوم ای‌تی‌اند‌تی",
     "fifa_name": "Dallas Stadium",
+    "official_name": "AT&T Stadium",
     "city_en": "Dallas (Arlington, Texas)",
     "city_fa": "دالاس",
     "country_en": "United States",
@@ -52,11 +64,14 @@
     "region": "Central"
   },
   {
-    "_id": { "$oid": "679c9c8a5749c4077500f005" },
+    "_id": {
+      "$oid": "679c9c8a5749c4077500f005"
+    },
     "id": "5",
-    "name_en": "NRG Stadium",
+    "name_en": "Houston Stadium (NRG Stadium)",
     "name_fa": "استادیوم ان‌آر‌جی",
     "fifa_name": "Houston Stadium",
+    "official_name": "NRG Stadium",
     "city_en": "Houston",
     "city_fa": "هیوستون",
     "country_en": "United States",
@@ -65,11 +80,14 @@
     "region": "Central"
   },
   {
-    "_id": { "$oid": "679c9c8a5749c4077500f006" },
+    "_id": {
+      "$oid": "679c9c8a5749c4077500f006"
+    },
     "id": "6",
-    "name_en": "GEHA Field at Arrowhead Stadium",
+    "name_en": "Kansas City Stadium (GEHA Field at Arrowhead Stadium)",
     "name_fa": "استادیوم اروهد",
     "fifa_name": "Kansas City Stadium",
+    "official_name": "GEHA Field at Arrowhead Stadium",
     "city_en": "Kansas City",
     "city_fa": "کانزاس سیتی",
     "country_en": "United States",
@@ -78,11 +96,14 @@
     "region": "Central"
   },
   {
-    "_id": { "$oid": "679c9c8a5749c4077500f007" },
+    "_id": {
+      "$oid": "679c9c8a5749c4077500f007"
+    },
     "id": "7",
-    "name_en": "Mercedes-Benz Stadium",
+    "name_en": "Atlanta Stadium (Mercedes-Benz Stadium)",
     "name_fa": "استادیوم مرسدس بنز",
     "fifa_name": "Atlanta Stadium",
+    "official_name": "Mercedes-Benz Stadium",
     "city_en": "Atlanta",
     "city_fa": "آتلانتا",
     "country_en": "United States",
@@ -91,11 +112,14 @@
     "region": "Eastern"
   },
   {
-    "_id": { "$oid": "679c9c8a5749c4077500f008" },
+    "_id": {
+      "$oid": "679c9c8a5749c4077500f008"
+    },
     "id": "8",
-    "name_en": "Hard Rock Stadium",
+    "name_en": "Miami Stadium (Hard Rock Stadium)",
     "name_fa": "استادیوم هارد راک",
     "fifa_name": "Miami Stadium",
+    "official_name": "Hard Rock Stadium",
     "city_en": "Miami (Miami Gardens)",
     "city_fa": "میامی",
     "country_en": "United States",
@@ -104,11 +128,14 @@
     "region": "Eastern"
   },
   {
-    "_id": { "$oid": "679c9c8a5749c4077500f009" },
+    "_id": {
+      "$oid": "679c9c8a5749c4077500f009"
+    },
     "id": "9",
-    "name_en": "Gillette Stadium",
+    "name_en": "Boston Stadium (Gillette Stadium)",
     "name_fa": "استادیوم ژیلت",
     "fifa_name": "Boston Stadium",
+    "official_name": "Gillette Stadium",
     "city_en": "Boston (Foxborough)",
     "city_fa": "بوستون",
     "country_en": "United States",
@@ -117,11 +144,14 @@
     "region": "Eastern"
   },
   {
-    "_id": { "$oid": "679c9c8a5749c4077500f010" },
+    "_id": {
+      "$oid": "679c9c8a5749c4077500f010"
+    },
     "id": "10",
-    "name_en": "Lincoln Financial Field",
+    "name_en": "Philadelphia Stadium (Lincoln Financial Field)",
     "name_fa": "استادیوم لینکلن فایننشال",
     "fifa_name": "Philadelphia Stadium",
+    "official_name": "Lincoln Financial Field",
     "city_en": "Philadelphia",
     "city_fa": "فیلادلفیا",
     "country_en": "United States",
@@ -130,11 +160,14 @@
     "region": "Eastern"
   },
   {
-    "_id": { "$oid": "679c9c8a5749c4077500f011" },
+    "_id": {
+      "$oid": "679c9c8a5749c4077500f011"
+    },
     "id": "11",
-    "name_en": "MetLife Stadium",
+    "name_en": "New York/New Jersey Stadium (MetLife Stadium)",
     "name_fa": "استادیوم متلایف",
     "fifa_name": "New York/New Jersey Stadium",
+    "official_name": "MetLife Stadium",
     "city_en": "New York/New Jersey (East Rutherford)",
     "city_fa": "نیویورک/نیوجرسی",
     "country_en": "United States",
@@ -143,11 +176,14 @@
     "region": "Eastern"
   },
   {
-    "_id": { "$oid": "679c9c8a5749c4077500f012" },
+    "_id": {
+      "$oid": "679c9c8a5749c4077500f012"
+    },
     "id": "12",
-    "name_en": "BMO Field",
+    "name_en": "Toronto Stadium (BMO Field)",
     "name_fa": "استادیوم بی‌ام‌او",
     "fifa_name": "Toronto Stadium",
+    "official_name": "BMO Field",
     "city_en": "Toronto",
     "city_fa": "تورنتو",
     "country_en": "Canada",
@@ -156,11 +192,14 @@
     "region": "Eastern"
   },
   {
-    "_id": { "$oid": "679c9c8a5749c4077500f013" },
+    "_id": {
+      "$oid": "679c9c8a5749c4077500f013"
+    },
     "id": "13",
-    "name_en": "BC Place",
+    "name_en": "BC Place Vancouver (BC Place)",
     "name_fa": "استادیوم بی‌سی پلیس",
     "fifa_name": "BC Place Vancouver",
+    "official_name": "BC Place",
     "city_en": "Vancouver",
     "city_fa": "ونکوور",
     "country_en": "Canada",
@@ -169,11 +208,14 @@
     "region": "Western"
   },
   {
-    "_id": { "$oid": "679c9c8a5749c4077500f014" },
+    "_id": {
+      "$oid": "679c9c8a5749c4077500f014"
+    },
     "id": "14",
-    "name_en": "Lumen Field",
+    "name_en": "Seattle Stadium (Lumen Field)",
     "name_fa": "استادیوم لومن فیلد",
     "fifa_name": "Seattle Stadium",
+    "official_name": "Lumen Field",
     "city_en": "Seattle",
     "city_fa": "سیاتل",
     "country_en": "United States",
@@ -182,11 +224,14 @@
     "region": "Western"
   },
   {
-    "_id": { "$oid": "679c9c8a5749c4077500f015" },
+    "_id": {
+      "$oid": "679c9c8a5749c4077500f015"
+    },
     "id": "15",
-    "name_en": "Levi's Stadium",
+    "name_en": "San Francisco Bay Area Stadium (Levi's Stadium)",
     "name_fa": "استادیوم لیوایز",
     "fifa_name": "San Francisco Bay Area Stadium",
+    "official_name": "Levi's Stadium",
     "city_en": "San Francisco Bay Area (Santa Clara)",
     "city_fa": "سن‌فرانسیسکو",
     "country_en": "United States",
@@ -195,11 +240,14 @@
     "region": "Western"
   },
   {
-    "_id": { "$oid": "679c9c8a5749c4077500f016" },
+    "_id": {
+      "$oid": "679c9c8a5749c4077500f016"
+    },
     "id": "16",
-    "name_en": "SoFi Stadium",
+    "name_en": "Los Angeles Stadium (SoFi Stadium)",
     "name_fa": "استادیوم سوفای",
     "fifa_name": "Los Angeles Stadium",
+    "official_name": "SoFi Stadium",
     "city_en": "Los Angeles (Inglewood)",
     "city_fa": "لس‌آنجلس",
     "country_en": "United States",
