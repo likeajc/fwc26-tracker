@@ -43,3 +43,7 @@ npm run dev          # http://localhost:3050
 
 There is also a usage walkthrough in [docs/usage.md](docs/usage.md) if you want
 worked examples of every endpoint, including the odds.
+
+## Contributors
+
+- OpenAI Codex — contributor and co-author for AI-assisted maintenance work.
