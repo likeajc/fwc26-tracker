@@ -404,6 +404,69 @@ router.get('/game/:idGame', async(req,res) => {
     };
 });
 
+/**
+ * @swagger
+ * /get/odds:
+ *   get:
+ *     summary: Get live match odds
+ *     description: >
+ *       Retrieve live win/draw/win implied probabilities (percentages summing to
+ *       ~100) for every match that has odds, sourced from Polymarket's per-match
+ *       prediction markets. Updated periodically by the live updater.
+ *     tags: [Games]
+ *     responses:
+ *       200:
+ *         description: List of matches with odds and team names
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 odds:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       game_id: { type: string }
+ *                       home_team_name_en: { type: string }
+ *                       away_team_name_en: { type: string }
+ *                       local_date: { type: string }
+ *                       odds:
+ *                         type: object
+ *                         properties:
+ *                           home: { type: number, description: Home win probability (%) }
+ *                           draw: { type: number, description: Draw probability (%) }
+ *                           away: { type: number, description: Away win probability (%) }
+ *                           source: { type: string }
+ *                           slug: { type: string }
+ *                           updated_at: { type: string, format: date-time }
+ *       400:
+ *         description: Error getting odds
+ */
+router.get('/odds', async(req,res) => {
+    try{
+        const games = await Game.find({ 'odds.updated_at': { $exists: true } }).lean();
+        const teamMap = await getTeamsMap();
+
+        const odds = games.map(g => ({
+            game_id: g.id,
+            home_team_id: g.home_team_id,
+            away_team_id: g.away_team_id,
+            home_team_name_en: teamMap[g.home_team_id] && teamMap[g.home_team_id].name_en,
+            away_team_name_en: teamMap[g.away_team_id] && teamMap[g.away_team_id].name_en,
+            local_date: g.local_date,
+            odds: g.odds
+        }));
+
+        return res.status(200).json({odds});
+    }catch(err){
+        return res.status(400).json({
+            error: 'Error getting odds',
+            details: err.message
+        });
+    }
+});
+
 // Stadium Get Routes
 
 /**

@@ -36,7 +36,8 @@ api/
 ├── models/                  # Mongoose schemas (team, group, game, stadium, user)
 ├── controllers/             # routes (get, data, auth, squads, health)
 ├── scripts/
-│   ├── auto-updater.js      # live score / scorer updater
+│   ├── auto-updater.js      # live score / scorer updater (also refreshes odds)
+│   ├── polymarket-odds.js   # live match odds from Polymarket (win/draw/win)
 │   ├── match-player.js      # Persian → FIFA name fuzzy matcher
 │   └── import/              # database seeders (groups, teams, stadiums, matches)
 ├── data/
@@ -64,7 +65,8 @@ npm run dev                        # start the API on http://localhost:3050
 Live updates during the tournament:
 
 ```bash
-npm run update:live
+npm run update:live   # live scores + scorers (every 3s) and odds (every 60s)
+npm run update:odds   # one-off odds refresh only
 ```
 
 ## Endpoints
@@ -75,7 +77,8 @@ Public (no auth):
 |--------------------------|-----------------------------------------------|
 | `GET /get/teams`         | 48 teams (optional `?group=A`)                |
 | `GET /get/groups`        | 12 groups / standings                         |
-| `GET /get/games`         | 104 matches with live scores and scorers      |
+| `GET /get/games`         | 104 matches with live scores, scorers and odds |
+| `GET /get/odds`          | live win/draw/win odds (%) per match           |
 | `GET /get/stadiums`      | 16 venues                                      |
 | `GET /get/squads`        | official squads for all 48 teams              |
 | `GET /get/squad/:team`   | one team's squad, e.g. `/get/squad/Brazil`    |
@@ -111,6 +114,33 @@ Scorer names from the feed are Persian; the updater resolves each one, in order:
 
 The curated dictionaries always take precedence; guessed names are never written
 into them automatically.
+
+### Match odds
+
+Each match carries live **win / draw / win** implied probabilities in an `odds`
+field (percentages summing to ~100), sourced from Polymarket's per-match 3-way
+prediction markets via the public, read-only [Gamma API](https://gamma-api.polymarket.com)
+— no auth, wallet or API key required.
+
+```jsonc
+"odds": {
+  "home": 67.8,            // home team win probability (%)
+  "draw": 20.6,            // draw probability (%)
+  "away": 11.6,            // away team win probability (%)
+  "source": "polymarket",
+  "slug": "fifwc-bel-irn-2026-06-21",  // source Polymarket event
+  "updated_at": "2026-06-21T12:00:00.000Z"
+}
+```
+
+`scripts/polymarket-odds.js` fetches each match event (one neg-risk event with
+three Yes/No markets — home win, away win, draw), reads each market's Yes price
+as that outcome's probability, normalizes the three to sum to 100, and orients
+them to our home/away. Polymarket events are matched to our games by **team name
++ date** (their slug codes are unreliable); the three teams whose Polymarket
+naming differs are handled by a small alias map in the script. The live updater
+refreshes odds every `ODDS_POLL_INTERVAL` ms (default 60s). Full API notes:
+[`docs/polymarket-api-research.md`](../docs/polymarket-api-research.md).
 
 ## Deployment
 

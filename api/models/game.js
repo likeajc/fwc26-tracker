@@ -66,6 +66,17 @@ const GameSchema = new mongoose.Schema({
         type: String,
         default: ""
     },
+    // Live win/draw/win implied probabilities (percentages summing to ~100),
+    // sourced from Polymarket's per-match 3-way markets. See
+    // scripts/polymarket-odds.js. Absent until the odds updater has run.
+    odds: {
+        home: { type: Number },        // home team win probability (%)
+        draw: { type: Number },        // draw probability (%)
+        away: { type: Number },        // away team win probability (%)
+        source: { type: String },      // e.g. "polymarket"
+        slug: { type: String },        // source Polymarket event slug
+        updated_at: { type: Date }     // when these odds were last refreshed
+    },
     homeTeam: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Team'
