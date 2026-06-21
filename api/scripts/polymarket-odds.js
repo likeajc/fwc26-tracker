@@ -1,28 +1,28 @@
 /**
- * World Cup 2026 — Polymarket Match Odds
+ * World Cup 2026, Polymarket match odds.
  *
- * Adds live win/draw/win implied probabilities to each match, sourced from
- * Polymarket's per-match 3-way prediction markets via the public, read-only
- * Gamma API (no auth, no wallet, no API key required).
+ * Puts a live win/draw/win split on every match. The numbers come from
+ * Polymarket's per-match market, read through its public Gamma API. No auth, no
+ * wallet, no API key, just a GET.
  *
- * How Polymarket models a single match (verified live):
- *   A match is one "neg-risk" EVENT (slug `fifwc-<home>-<away>-<YYYY-MM-DD>`,
- *   tags `fifa-world-cup` + `games`) that contains THREE binary Yes/No MARKETS:
- *     - "Will <Home> win on <date>?"          groupItemTitle: "<Home>"
- *     - "Will <Away> win on <date>?"          groupItemTitle: "<Away>"
+ * Here's how Polymarket models one match (checked against the live API). A match
+ * is a single "neg-risk" event (slug `fifwc-<home>-<away>-<YYYY-MM-DD>`, tagged
+ * `fifa-world-cup` and `games`) that holds three Yes/No markets:
+ *     - "Will <Home> win on <date>?"            groupItemTitle: "<Home>"
+ *     - "Will <Away> win on <date>?"            groupItemTitle: "<Away>"
  *     - "Will <Home> vs. <Away> end in a draw?" groupItemTitle: "Draw (...)"
- *   Each market's YES price (outcomePrices[0]) is that outcome's implied
- *   probability. The three sum to ~1, so we normalize them to clean
- *   percentages that add up to 100.
+ * Each market's Yes price (outcomePrices[0]) is that outcome's probability. The
+ * three add up to about 1, so we normalize them into clean percentages that hit
+ * 100 exactly.
  *
- * Matching to our DB: the slug's 3-letter codes are unreliable (e.g. the
- * "Ecuador vs. Curaçao" event has slug `fifwc-ecu-kor-...`), so we match by
- * normalized TEAM NAME + match DATE, never by the slug codes.
+ * Matching to our own database is by team name plus date, never by the slug.
+ * The slug's 3-letter codes lie often enough that you can't trust them. The
+ * "Ecuador vs. Curaçao" event, for one, has slug `fifwc-ecu-kor-...`.
  *
- * See docs/polymarket-api-research.md for the full API reference.
+ * The full API writeup is in docs/polymarket-api-research.md.
  *
- * Usage (standalone):  node scripts/polymarket-odds.js
- * Usage (module):      const { updateOdds } = require('./polymarket-odds');
+ * Run it standalone:  node scripts/polymarket-odds.js
+ * Or pull it in:      const { updateOdds } = require('./polymarket-odds');
  */
 
 const GAMMA = process.env.POLYMARKET_GAMMA_URL || "https://gamma-api.polymarket.com";
@@ -40,7 +40,7 @@ const TEAM_ALIASES = {
   drcongo: "congodr",
 };
 
-// ── Pure helpers (no network / no DB — unit-tested) ─────────────────────────
+// Pure helpers. No network, no DB, so they're easy to unit-test.
 
 function normalizeName(s) {
   return String(s || "")
@@ -186,7 +186,7 @@ function buildGameOdds(events, teams, games, now = new Date()) {
   return updates;
 }
 
-// ── Network + DB ────────────────────────────────────────────────────────────
+// Network and DB.
 
 // Fetch all open FIFA World Cup events from Gamma, paginating defensively.
 async function fetchMatchEvents() {
@@ -242,7 +242,7 @@ module.exports = {
   TEAM_ALIASES,
 };
 
-// ── Standalone runner ───────────────────────────────────────────────────────
+// Standalone runner.
 
 if (require.main === module) {
   const { MongoClient } = require("mongodb");
