@@ -21,6 +21,33 @@ FIFA spelling before they land in the database. The odds come from Polymarket.
 The API has public read endpoints, admin routes behind JWT, Swagger docs, and a
 test suite.
 
+## Live API
+
+The API is deployed and open for any app to consume:
+
+- **Base URL:** `https://fwc26-tracker-api.fly.dev`
+- **Interactive docs:** [`/api-docs`](https://fwc26-tracker-api.fly.dev/api-docs) (Swagger — try every endpoint in the browser)
+- **Health:** [`/health`](https://fwc26-tracker-api.fly.dev/health)
+
+The read endpoints under `/get/*` are public and CORS-open (any origin, `GET`),
+so you can call them straight from a browser app — no key, no auth:
+
+```js
+const res = await fetch('https://fwc26-tracker-api.fly.dev/get/games');
+const { games } = await res.json();
+```
+
+```bash
+curl https://fwc26-tracker-api.fly.dev/get/teams
+curl https://fwc26-tracker-api.fly.dev/get/groups
+curl https://fwc26-tracker-api.fly.dev/get/games
+curl https://fwc26-tracker-api.fly.dev/get/stadiums
+curl https://fwc26-tracker-api.fly.dev/get/odds
+```
+
+Scores, standings, and odds update on their own. Admin/write routes sit behind
+JWT. Deployment details are in [docs/deploy-flyio.md](docs/deploy-flyio.md).
+
 ## Structure
 
 ```
