@@ -29,6 +29,11 @@ const path = require("path");
 const MONGO_URI = process.env.MONGODB_URL || process.env.MONGO_URI || "mongodb://127.0.0.1:27017/worldcup2026";
 const DB_NAME = process.env.DB_NAME; // undefined -> use the db from the URI
 const POLL_INTERVAL = parseInt(process.env.POLL_INTERVAL || "3000");
+// Odds move slower than scores and come from a separate source (Polymarket), so
+// they poll on their own, gentler cadence (default 60s) — well within rate limits.
+const ODDS_POLL_INTERVAL = parseInt(process.env.ODDS_POLL_INTERVAL || "60000");
+
+const { updateOdds } = require("./polymarket-odds");
 
 // Load mappings
 const TEAM_MAP = JSON.parse(fs.readFileSync(path.join(__dirname, "../data/team-name-map.json"), "utf8"));
@@ -277,7 +282,24 @@ async function poll() {
   } catch {} finally { await client.close(); }
 }
 
-console.log(`[auto-updater] Starting — polling every ${POLL_INTERVAL}ms`);
+// Refresh Polymarket match odds onto the games. Runs on its own slower interval.
+async function pollOdds() {
+  const client = new MongoClient(MONGO_URI);
+  try {
+    await client.connect();
+    const db = client.db(DB_NAME);
+    const n = await updateOdds(db);
+    if (n) console.log(`[auto-updater] Odds updated for ${n} matches`);
+  } catch (err) {
+    console.log(`[auto-updater] Odds update skipped: ${err.message}`);
+  } finally {
+    await client.close();
+  }
+}
+
+console.log(`[auto-updater] Starting — scores every ${POLL_INTERVAL}ms, odds every ${ODDS_POLL_INTERVAL}ms`);
 fullSync().then(() => {
   setInterval(poll, POLL_INTERVAL);
+  pollOdds();
+  setInterval(pollOdds, ODDS_POLL_INTERVAL);
 });

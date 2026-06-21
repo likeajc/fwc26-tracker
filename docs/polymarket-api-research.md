@@ -264,6 +264,41 @@ probability**:
 
 Sources: live Gamma fetches; [market-data overview](https://docs.polymarket.com/market-data/overview).
 
+### 5b. Per-match win/draw/win (1X2) markets — used by `scripts/polymarket-odds.js`
+
+For **single-match odds** (e.g. "Ecuador 62% / Draw 24% / Curaçao 14%") the shape
+is different from the tournament-winner market above. Verified live 2026-06-21:
+
+- A match is **one neg-risk Event** with slug **`fifwc-<home>-<away>-<YYYY-MM-DD>`**,
+  tagged `sports` (1), `games` (100639), `soccer` (100350), **`fifa-world-cup`
+  (102232)**, with `negRisk: true`.
+- It contains exactly **three binary Yes/No markets**, identified by
+  `groupItemTitle`:
+  - `"<Home>"` → "Will \<Home\> win on \<date\>?"
+  - `"<Away>"` → "Will \<Away\> win on \<date\>?"
+  - `"Draw (<Home> vs. <Away>)"` → "Will … end in a draw?"
+- Each market's **Yes price** (`outcomePrices[0]`) is that outcome's implied
+  probability. With neg-risk the three sum to ~1.0, so normalize to clean
+  percentages. Example — *Tunisia vs. Japan* (`fifwc-tun-jpn-2026-06-21`):
+  Japan 67.5% / Draw 20.5% / Tunisia 11.5% (raw Yes summed to 0.995).
+
+**List all match events:** `GET /events?tag_id=102232&closed=false&limit=100`
+(paginate via `offset`), then keep events with exactly 3 markets and a `" vs"`
+title.
+
+**⚠️ Matching gotcha:** the slug's 3-letter codes are **not reliable** — the
+"Ecuador vs. Curaçao" event has slug `fifwc-ecu-kor-...` (`kor` ≠ Curaçao). Match
+Polymarket events to your own fixtures by **team name + date**, not by slug
+codes. Across all 48 FWC26 teams, only three Polymarket names need an alias:
+`IR Iran`→Iran, `DR Congo`→Congo DR, `Bosnia-Herzegovina`→Bosnia and Herzegovina.
+
+**⚠️ Stale markets:** a few match markets read as already resolved (e.g. one
+outcome at ~0.999); reflect the source faithfully or filter outcomes ≥ ~0.99 if
+you want to hide settled games.
+
+Source: live Gamma fetches (`/events?slug=fifwc-tun-jpn-2026-06-21`,
+`/public-search?q=...`).
+
 ---
 
 ## 6. WebSocket (live updates) — optional, for real-time
