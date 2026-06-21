@@ -118,9 +118,13 @@ if (swaggerUi && specs) {
  *         description: Welcome message
  */
 app.get('/', (req, res) => {
+    // When the docs are enabled, the root is the human-facing entry point:
+    // send visitors straight to the interactive Swagger UI.
+    if (config.ENABLE_SWAGGER) {
+        return res.redirect('/api-docs');
+    }
     res.send({
         message: 'FIFA World Cup 2026 API',
-        docs: config.ENABLE_SWAGGER ? '/api-docs' : undefined,
         endpoints: ['/get/teams', '/get/groups', '/get/games', '/get/stadiums']
     });
 });

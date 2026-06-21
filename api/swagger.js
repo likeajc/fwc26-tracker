@@ -9,10 +9,12 @@ const options = {
       version: '1.0.4',
       description: 'Complete REST API for FIFA World Cup 2026 - United States, Mexico & Canada'
     },
+    // Server URL comes from API_URL so the "Try it out" button targets the
+    // real host (e.g. the deployed API) instead of a hard-coded localhost.
     servers: [
       {
-        url: 'http://localhost:3050',
-        description: 'Development server'
+        url: process.env.API_URL || `http://localhost:${process.env.PORT || 3050}`,
+        description: process.env.NODE_ENV === 'production' ? 'Production server' : 'Development server'
       }
     ],
     components: {
