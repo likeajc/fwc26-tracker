@@ -158,6 +158,18 @@ const options = {
               type: 'string',
               description: 'Match finished status (e.g. FALSE/TRUE)'
             },
+            odds: {
+              type: 'object',
+              description: 'Live win/draw/win implied probabilities from Polymarket (whole-number percentages summing to 100). Absent until the updater has run.',
+              properties: {
+                home: { type: 'number', description: 'Home team win probability (%)' },
+                draw: { type: 'number', description: 'Draw probability (%)' },
+                away: { type: 'number', description: 'Away team win probability (%)' },
+                source: { type: 'string', description: 'Odds source, e.g. "polymarket"' },
+                slug: { type: 'string', description: 'Source Polymarket event slug' },
+                updated_at: { type: 'string', format: 'date-time', description: 'When odds were last refreshed' }
+              }
+            },
             time_elapsed: {
               type: 'string',
               description: 'Match clock status (e.g. notstarted, 45, HT, FT)'
