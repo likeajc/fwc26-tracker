@@ -17,7 +17,7 @@ function loadEnvConfig() {
   const result = dotenv.config({ path: envPath });
 
   if (result.error) {
-    console.warn(`⚠️ ${envFile} not found, falling back to defaults`);
+    console.warn(`${envFile} not found, falling back to defaults`);
     dotenv.config();
   }
 

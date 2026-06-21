@@ -30,7 +30,7 @@ async function importMatches() {
         console.log(`Found ${teams.length} teams in database`);
         
         if (teams.length === 0) {
-            console.error('❌ No teams found! Please import teams first using: npm run import:teams');
+            console.error('No teams found! Please import teams first using: npm run import:teams');
             process.exit(1);
         }
         
@@ -53,7 +53,7 @@ async function importMatches() {
             const isGroup = (item.type || 'group') === 'group';
 
             if (isGroup && (!homeTeamId || !awayTeamId)) {
-                console.warn(`⚠️  Skipping match ${item.id}: Missing team mapping (home: ${item.home_team_id}, away: ${item.away_team_id})`);
+                console.warn(`Skipping match ${item.id}: Missing team mapping (home: ${item.home_team_id}, away: ${item.away_team_id})`);
                 continue;
             }
 
@@ -88,7 +88,7 @@ async function importMatches() {
             }
         }
         
-        console.log('\n✅ Import completed successfully!');
+        console.log('\nImport completed successfully!');
         console.log(`Total matches imported: ${imported}`);
         
         // Verify
@@ -97,7 +97,7 @@ async function importMatches() {
         
         process.exit(0);
     } catch (error) {
-        console.error('❌ Error during import:', error);
+        console.error('Error during import:', error);
         process.exit(1);
     }
 }

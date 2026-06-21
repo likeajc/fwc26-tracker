@@ -1,33 +1,37 @@
 # FWC26 Tracker
 
-A tracker for the **FIFA World Cup 2026** — hosted by Canada, the USA and Mexico.
+A tracker for the FIFA World Cup 2026, the one Canada, the USA, and Mexico are
+hosting together. It runs a REST API that serves the whole tournament dataset
+with live scores, and it calls every team, stadium, and player by the official
+FIFA name rather than whatever the feed happened to send.
 
-It provides a REST API serving the full tournament dataset with live scores, and
-presents every team, stadium and player by its **official FIFA** name.
+## What you get
 
-## What's in the project
+48 teams, 12 groups, 104 matches, 16 stadiums. The full squad list too, all 26
+players for every team, so 1,248 names in total.
 
-- **Tournament data** — 48 teams, 12 groups, 104 matches, 16 stadiums.
-- **Official FIFA naming** — teams (e.g. *Korea Republic*, *Côte d'Ivoire*),
-  stadiums (*Toronto Stadium (BMO Field)*) and players.
-- **Official squads** — the 26-player squad for all 48 teams (1,248 players).
-- **Live updates** — scores, goalscorers and group standings updated from a
-  Persian livescore feed, with scorer names translated to their official FIFA
-  spelling.
-- **REST API** — public read endpoints, JWT-protected admin routes, Swagger
-  docs, and a test suite.
+Names follow FIFA spelling. That means Korea Republic, not South Korea, and
+Côte d'Ivoire with the accents. Stadiums carry both names, like "Toronto
+Stadium (BMO Field)".
+
+Scores, goalscorers, group standings, and live match odds update on their own.
+The score feed is Persian, so scorer names get translated back to their official
+FIFA spelling before they land in the database. The odds come from Polymarket.
+
+The API has public read endpoints, admin routes behind JWT, Swagger docs, and a
+test suite.
 
 ## Structure
 
 ```
 fwc26-tracker/
-└── api/        # the REST API (Express + MongoDB) — see api/README.md
+└── api/        # the REST API (Express + MongoDB), see api/README.md
 ```
 
 ## Getting started
 
-The API lives in [`api/`](api). See **[api/README.md](api/README.md)** for setup,
-endpoints, data model, deployment and tests.
+The API lives in [`api/`](api). Read [api/README.md](api/README.md) for setup,
+endpoints, the data model, deployment, and tests. The short version:
 
 ```bash
 cd api
@@ -36,3 +40,6 @@ cp .env.example .env.development
 npm run import:all
 npm run dev          # http://localhost:3050
 ```
+
+There is also a usage walkthrough in [docs/usage.md](docs/usage.md) if you want
+worked examples of every endpoint, including the odds.

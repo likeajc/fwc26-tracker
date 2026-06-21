@@ -1,23 +1,23 @@
 /**
- * World Cup 2026 — Auto Live Updater
- * 
- * Automatically fetches live match data from Varzesh3 API and updates MongoDB.
- * Replaces manual score entry with real-time automated updates.
- * 
- * Features:
- * - Live scores updated every 3 seconds
- * - Goal scorers with English names (from player database)
- * - Penalty goals detected (eventType 3)
- * - Group standings auto-calculated after each match
- * - Persian → English player name translation via player-names.json
- * 
- * Usage:
+ * World Cup 2026, live updater.
+ *
+ * Pulls live match data from the Varzesh3 API and writes it to MongoDB, so
+ * nobody has to type scores in by hand. It also refreshes the Polymarket odds.
+ *
+ * What it does:
+ * - Scores every 3 seconds.
+ * - Goalscorers with their English names, from the player database.
+ * - Penalties, spotted via eventType 3.
+ * - Group tables recalculated after each match.
+ * - Persian player names translated to English through player-names.json.
+ *
+ * Run it:
  *   node scripts/auto-updater.js
- * 
- * Requirements:
- *   - MongoDB running with the worldcup2026 database seeded
- *   - data/player-names.json (player ID → English name mapping)
- *   - data/team-name-map.json (Persian → English team names)
+ *
+ * What it needs:
+ * - MongoDB up, with the worldcup2026 database seeded.
+ * - data/player-names.json (player id to English name).
+ * - data/team-name-map.json (Persian to English team names).
  */
 
 const { MongoClient } = require("mongodb");
@@ -30,7 +30,7 @@ const MONGO_URI = process.env.MONGODB_URL || process.env.MONGO_URI || "mongodb:/
 const DB_NAME = process.env.DB_NAME; // undefined -> use the db from the URI
 const POLL_INTERVAL = parseInt(process.env.POLL_INTERVAL || "3000");
 // Odds move slower than scores and come from a separate source (Polymarket), so
-// they poll on their own, gentler cadence (default 60s) — well within rate limits.
+// they poll on their own, gentler cadence (default 60s), well within rate limits.
 const ODDS_POLL_INTERVAL = parseInt(process.env.ODDS_POLL_INTERVAL || "60000");
 
 const { updateOdds } = require("./polymarket-odds");
@@ -76,7 +76,7 @@ for (const [fa, en] of Object.entries(playerNames)) playerNameIndex[normalizeFa(
 
 // Unknown scorers are queued here (exact feed Persian name -> { id, official })
 // so each can be mapped to its official FIFA name in data/player-names.json.
-// We never write guessed names into the dictionaries — they hold only curated
+// We never write guessed names into the dictionaries, they hold only curated
 // official FIFA names.
 const UNMAPPED_PATH = path.join(__dirname, "../data/unmapped-players.json");
 let unmapped = {};
@@ -245,7 +245,7 @@ async function updateStandings(db) {
   }
 }
 
-// ── Main ─────────────────────────────────────────────────────────────────────
+// Main.
 
 async function fullSync() {
   console.log("[auto-updater] Full sync starting...");
@@ -297,7 +297,7 @@ async function pollOdds() {
   }
 }
 
-console.log(`[auto-updater] Starting — scores every ${POLL_INTERVAL}ms, odds every ${ODDS_POLL_INTERVAL}ms`);
+console.log(`[auto-updater] Starting. scores every ${POLL_INTERVAL}ms, odds every ${ODDS_POLL_INTERVAL}ms`);
 
 // Start both polling loops and keep them running 24/7. The initial full sync is
 // best-effort: even if it fails (e.g. a feed is briefly down at boot) we still

@@ -1,7 +1,7 @@
 {
   "name": "fwc26-tracker-api",
   "version": "1.0.0",
-  "description": "REST API for FIFA World Cup 2026 — live scores, match schedule, group standings, 48 teams, 16 stadiums.",
+  "description": "REST API for FIFA World Cup 2026 with live scores, match schedule, group standings, 48 teams, and 16 stadiums.",
   "main": "index.js",
   "scripts": {
     "start": "node index.js",

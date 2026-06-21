@@ -1,5 +1,5 @@
 // Unit tests for the Polymarket match-odds mapping logic.
-// No database or network required — exercises the pure helpers only.
+// No database or network needed, it only exercises the pure helpers.
 const { test } = require('node:test');
 const assert = require('node:assert');
 const {
@@ -92,7 +92,7 @@ test('buildGameOdds maps to our game and orients to home/away', () => {
   const games = [
     { id: '10', home_team_id: '20', away_team_id: '21', local_date: '06/21/2026 16:00' },
   ];
-  // Polymarket lists Japan first, but our game's home is Tunisia — odds must flip.
+  // Polymarket lists Japan first, but our game's home is Tunisia, so odds flip.
   const ev = makeEvent('fifwc-jpn-tun-2026-06-21', 'Japan vs. Tunisia', 'Japan', 'Tunisia', 0.675, 0.205, 0.115);
   const updates = buildGameOdds([ev], teams, games);
 
