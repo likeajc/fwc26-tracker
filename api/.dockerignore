@@ -1,0 +1,18 @@
+node_modules
+npm-debug.log
+.git
+.gitignore
+.history
+.vscode
+.idea
+.DS_Store
+
+# Never bake secrets into the image — set them as Fly secrets instead
+.env
+.env.*
+!.env.example
+create-mongodb-user.js
+
+# Not needed at runtime
+test
+README.md
