@@ -42,7 +42,7 @@ async function importTeams() {
             await Team.create(teamData);
         }
         
-        console.log('\n✅ Import completed successfully!');
+        console.log('\nImport completed successfully!');
         console.log(`Total teams imported: ${teamsData.length}`);
         
         // Verify
@@ -51,7 +51,7 @@ async function importTeams() {
         
         process.exit(0);
     } catch (error) {
-        console.error('❌ Error during import:', error);
+        console.error('Error during import:', error);
         process.exit(1);
     }
 }

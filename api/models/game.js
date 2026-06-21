@@ -66,9 +66,9 @@ const GameSchema = new mongoose.Schema({
         type: String,
         default: ""
     },
-    // Live win/draw/win implied probabilities — whole-number percentages that
-    // always sum to exactly 100 — sourced from Polymarket's per-match 3-way
-    // markets. See scripts/polymarket-odds.js. Absent until the updater has run.
+    // Live win/draw/win probabilities. Whole numbers that always add up to 100,
+    // pulled from Polymarket's per-match market (see scripts/polymarket-odds.js).
+    // Not there until the updater has run at least once.
     odds: {
         home: { type: Number },        // home team win probability (%)
         draw: { type: Number },        // draw probability (%)

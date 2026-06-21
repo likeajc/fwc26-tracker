@@ -44,7 +44,7 @@ async function importStadiums() {
             await Stadium.create(stadiumData);
         }
         
-        console.log('\n✅ Import completed successfully!');
+        console.log('\nImport completed successfully!');
         console.log(`Total stadiums imported: ${stadiumsData.length}`);
         
         // Verify
@@ -53,7 +53,7 @@ async function importStadiums() {
         
         process.exit(0);
     } catch (error) {
-        console.error('❌ Error during import:', error);
+        console.error('Error during import:', error);
         process.exit(1);
     }
 }

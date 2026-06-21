@@ -1,4 +1,4 @@
-// Data-integrity tests — validate the shipped JSON data and its invariants.
+// Data-integrity tests. Check the shipped JSON data and the things that must hold.
 // No database or network required.
 const { test } = require('node:test');
 const assert = require('node:assert');
@@ -26,7 +26,7 @@ test('seed/teams.json: 48 teams with required fields', () => {
       assert.ok(t[f], `team ${t.id} missing ${f}`);
     }
   }
-  // 12 groups A–L, 4 teams each
+  // 12 groups A to L, 4 teams each
   const byGroup = {};
   for (const t of teams) (byGroup[t.groups] ||= []).push(t);
   assert.strictEqual(Object.keys(byGroup).length, 12);
@@ -60,7 +60,7 @@ test('seed/matches.json: 104 matches', () => {
   assert.strictEqual(matches.length, 104);
 });
 
-test('squads.json: 48 squads, 23–26 players, 1248 total, keyed by team name', () => {
+test('squads.json: 48 squads, 23 to 26 players, 1248 total, keyed by team name', () => {
   const keys = Object.keys(squads);
   assert.strictEqual(keys.length, 48);
   let total = 0;
