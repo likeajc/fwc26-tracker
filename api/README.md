@@ -118,15 +118,16 @@ into them automatically.
 ### Match odds
 
 Each match carries live **win / draw / win** implied probabilities in an `odds`
-field (percentages summing to ~100), sourced from Polymarket's per-match 3-way
-prediction markets via the public, read-only [Gamma API](https://gamma-api.polymarket.com)
-— no auth, wallet or API key required.
+field — whole-number percentages that always sum to exactly 100 — sourced from
+Polymarket's per-match 3-way prediction markets via the public, read-only
+[Gamma API](https://gamma-api.polymarket.com) — no auth, wallet or API key
+required.
 
 ```jsonc
 "odds": {
-  "home": 67.8,            // home team win probability (%)
-  "draw": 20.6,            // draw probability (%)
-  "away": 11.6,            // away team win probability (%)
+  "home": 68,              // home team win probability (%)
+  "draw": 21,              // draw probability (%)
+  "away": 11,              // away team win probability (%)
   "source": "polymarket",
   "slug": "fifwc-bel-irn-2026-06-21",  // source Polymarket event
   "updated_at": "2026-06-21T12:00:00.000Z"
@@ -135,11 +136,13 @@ prediction markets via the public, read-only [Gamma API](https://gamma-api.polym
 
 `scripts/polymarket-odds.js` fetches each match event (one neg-risk event with
 three Yes/No markets — home win, away win, draw), reads each market's Yes price
-as that outcome's probability, normalizes the three to sum to 100, and orients
-them to our home/away. Polymarket events are matched to our games by **team name
-+ date** (their slug codes are unreliable); the three teams whose Polymarket
-naming differs are handled by a small alias map in the script. The live updater
-refreshes odds every `ODDS_POLL_INTERVAL` ms (default 60s). Full API notes:
+as that outcome's probability, and normalizes the three into whole-number
+percentages that sum to exactly 100 (largest-remainder rounding), oriented to
+our home/away. Polymarket events are matched to our games by **team name + date**
+(their slug codes are unreliable); the three teams whose Polymarket naming
+differs are handled by a small alias map in the script. The live updater runs
+24/7 and refreshes odds every `ODDS_POLL_INTERVAL` ms (default 60s). Full API
+notes:
 [`docs/polymarket-api-research.md`](../docs/polymarket-api-research.md).
 
 ## Deployment

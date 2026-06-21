@@ -103,13 +103,31 @@ function parseMatchEvent(event) {
   };
 }
 
-// Normalize the three YES prices into percentages that sum to 100.
-// Returns { a, b, draw } as numbers rounded to 1 decimal.
+// Round an array of values to whole numbers that sum exactly to `total`,
+// using the largest-remainder (Hamilton) method: floor everything, then hand
+// the leftover units to the values with the biggest fractional parts. This
+// guarantees the rounded percentages always add up to exactly 100.
+function roundToSum(values, total = 100) {
+  const floors = values.map((v) => Math.floor(v));
+  const result = floors.slice();
+  let remainder = total - floors.reduce((a, b) => a + b, 0);
+  const byFrac = values
+    .map((v, i) => ({ i, frac: v - Math.floor(v) }))
+    .sort((a, b) => b.frac - a.frac);
+  for (let k = 0; remainder > 0 && k < byFrac.length; k++, remainder--) {
+    result[byFrac[k].i] += 1;
+  }
+  return result;
+}
+
+// Normalize the three YES prices into whole-number percentages that sum to 100.
+// Returns { a, b, draw } as integers.
 function impliedPercentages(parsed) {
   const sum = parsed.teamA.yes + parsed.teamB.yes + parsed.draw.yes;
   if (!(sum > 0)) return null;
-  const pct = (x) => Math.round((x / sum) * 1000) / 10;
-  return { a: pct(parsed.teamA.yes), b: pct(parsed.teamB.yes), draw: pct(parsed.draw.yes) };
+  const raw = [parsed.teamA.yes, parsed.teamB.yes, parsed.draw.yes].map((x) => (x / sum) * 100);
+  const [a, b, draw] = roundToSum(raw, 100);
+  return { a, b, draw };
 }
 
 // Build { normalizedName -> team.id } from our teams.
@@ -214,6 +232,7 @@ module.exports = {
   matchDateFromSlug,
   dateFromLocalDate,
   parseMatchEvent,
+  roundToSum,
   impliedPercentages,
   buildNameIndex,
   buildGameOdds,

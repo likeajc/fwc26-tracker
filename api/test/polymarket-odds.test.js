@@ -8,6 +8,7 @@ const {
   matchDateFromSlug,
   dateFromLocalDate,
   parseMatchEvent,
+  roundToSum,
   impliedPercentages,
   buildGameOdds,
 } = require('../scripts/polymarket-odds');
@@ -65,11 +66,21 @@ test('parseMatchEvent rejects malformed events', () => {
   assert.strictEqual(parseMatchEvent({ markets: [{}, {}] }), null); // not 3
 });
 
-test('impliedPercentages normalizes to sum 100', () => {
+test('roundToSum produces whole numbers that sum exactly to 100', () => {
+  // 33.33 each would naively round to 33+33+33 = 99; largest-remainder fixes it.
+  const r = roundToSum([100 / 3, 100 / 3, 100 / 3], 100);
+  assert.ok(r.every((n) => Number.isInteger(n)), 'all integers');
+  assert.strictEqual(r.reduce((a, b) => a + b, 0), 100);
+  // A case that would naively round up to 101.
+  const r2 = roundToSum([33.5, 33.5, 33], 100);
+  assert.strictEqual(r2.reduce((a, b) => a + b, 0), 100);
+});
+
+test('impliedPercentages gives whole numbers summing to exactly 100', () => {
   const ev = makeEvent('s', 't', 'Tunisia', 'Japan', 0.115, 0.205, 0.675);
   const pct = impliedPercentages(parseMatchEvent(ev));
-  const total = pct.a + pct.b + pct.draw;
-  assert.ok(Math.abs(total - 100) < 0.2, `sum was ${total}`);
+  assert.ok(Number.isInteger(pct.a) && Number.isInteger(pct.b) && Number.isInteger(pct.draw));
+  assert.strictEqual(pct.a + pct.b + pct.draw, 100);
 });
 
 test('buildGameOdds maps to our game and orients to home/away', () => {
@@ -88,10 +99,11 @@ test('buildGameOdds maps to our game and orients to home/away', () => {
   assert.strictEqual(updates.length, 1);
   const u = updates[0];
   assert.strictEqual(u.gameId, '10');
-  // Tunisia is our home (~11.6%), Japan our away (~67.8%)
-  assert.ok(u.odds.home > 10 && u.odds.home < 13, `home ${u.odds.home}`);
-  assert.ok(u.odds.away > 66 && u.odds.away < 69, `away ${u.odds.away}`);
-  assert.ok(u.odds.draw > 19 && u.odds.draw < 22, `draw ${u.odds.draw}`);
+  // Tunisia is our home (~11.6% -> 11), Japan our away (~67.8% -> 68), draw 21
+  assert.strictEqual(u.odds.home, 11);
+  assert.strictEqual(u.odds.away, 68);
+  assert.strictEqual(u.odds.draw, 21);
+  assert.strictEqual(u.odds.home + u.odds.draw + u.odds.away, 100);
   assert.strictEqual(u.odds.source, 'polymarket');
   assert.strictEqual(u.odds.slug, 'fifwc-jpn-tun-2026-06-21');
 });

@@ -298,8 +298,18 @@ async function pollOdds() {
 }
 
 console.log(`[auto-updater] Starting — scores every ${POLL_INTERVAL}ms, odds every ${ODDS_POLL_INTERVAL}ms`);
-fullSync().then(() => {
+
+// Start both polling loops and keep them running 24/7. The initial full sync is
+// best-effort: even if it fails (e.g. a feed is briefly down at boot) we still
+// start the intervals, so a transient startup error never leaves the updater
+// idle. Each poll catches its own errors, so a failed cycle just retries next
+// tick rather than crashing the process.
+function startPolling() {
   setInterval(poll, POLL_INTERVAL);
   pollOdds();
   setInterval(pollOdds, ODDS_POLL_INTERVAL);
-});
+}
+
+fullSync()
+  .catch((err) => console.log(`[auto-updater] Initial full sync failed: ${err.message}`))
+  .finally(startPolling);
