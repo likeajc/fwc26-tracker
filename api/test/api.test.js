@@ -1,4 +1,4 @@
-// API integration tests — seed a database, start the server, hit the endpoints.
+// API integration tests. Seed a database, start the server, hit the endpoints.
 // Requires a reachable MongoDB (MONGODB_URL or localhost:27017). If MongoDB is
 // not reachable the whole suite is skipped rather than failing.
 const { test, before, after } = require('node:test');

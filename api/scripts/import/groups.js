@@ -35,7 +35,7 @@ async function importGroups() {
             await Group.create(groupData);
         }
 
-        console.log('\n✅ Import completed successfully!');
+        console.log('\nImport completed successfully!');
         console.log(`Total groups imported: ${groupsData.length}`);
 
         // Verify
@@ -44,7 +44,7 @@ async function importGroups() {
 
         process.exit(0);
     } catch (error) {
-        console.error('❌ Error during import:', error);
+        console.error('Error during import:', error);
         process.exit(1);
     }
 }

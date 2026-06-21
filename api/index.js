@@ -12,11 +12,11 @@ const cors = require('cors');
 
 // Catch unhandled errors
 process.on('uncaughtException', (err) => {
-    console.error('❌ Uncaught Exception:', err);
+    console.error('Uncaught Exception:', err);
     console.error(err.stack);
 });
 process.on('unhandledRejection', (err) => {
-    console.error('❌ Unhandled Rejection:', err);
+    console.error('Unhandled Rejection:', err);
     console.error(err.stack);
 });
 
@@ -33,12 +33,12 @@ if (config.ENABLE_SWAGGER) {
         const swagger = require('./swagger');
         swaggerUi = swagger.swaggerUi;
         specs = swagger.specs;
-        console.log('✅ Swagger loaded');
+        console.log('Swagger loaded');
     } catch (err) {
-        console.error('❌ Swagger failed to load:', err.message);
+        console.error('Swagger failed to load:', err.message);
     }
 } else {
-    console.log('⚠️ Swagger is disabled');
+    console.log('Swagger is disabled');
 }
 
 // CORS - public read endpoints must be reachable from browsers on other origins
@@ -134,7 +134,7 @@ app.use((req, res, next) => {
 });
 
 app.use((error, req, res, next) => {
-    console.error(`❌ Error ${error.status || 500}: ${error.message} | ${req.method} ${req.url}`);
+    console.error(`Error ${error.status || 500}: ${error.message} | ${req.method} ${req.url}`);
     res.status(error.status || 500);
     return res.send({
         error: {

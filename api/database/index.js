@@ -24,13 +24,13 @@ const MONGODB_CONFIG = isProd ? {
     }
 };
 
-console.log(`🔌 Connecting to MongoDB (${isProd ? 'Production' : 'Development'})...`);
+console.log(`Connecting to MongoDB (${isProd ? 'Production' : 'Development'})...`);
 
 mongoose.connect(MONGODB_CONFIG.url, MONGODB_CONFIG.options)
 .then(() => {
-    console.log("✅ Successful connection with MongoDB");
+    console.log("Successful connection with MongoDB");
 }).catch((err) => {
-    console.log('❌ Error: Connection to MongoDB not successful', err.message);
+    console.log('Error: Connection to MongoDB not successful', err.message);
     process.exit(1);
 });
 

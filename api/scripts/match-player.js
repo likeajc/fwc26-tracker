@@ -28,8 +28,8 @@ function transliterateToken(tok, opts) {
     const c = chars[i];
     const first = i === 0;
     const last = i === chars.length - 1;
-    // و and ی are vowel/consonant ambiguous; initial is almost always a
-    // consonant, otherwise it depends on the word — callers try both.
+    // و and ی sit between vowel and consonant. At the start they're almost
+    // always a consonant, otherwise it depends on the word, so callers try both.
     if (c === "و") { out += first ? "v" : opts.waw; continue; }
     if (c === "ی" || c === "ي" || c === "ى") { out += first ? "y" : opts.yeh; continue; }
     if (c === "ه" || c === "ة") { out += last ? "" : "h"; continue; } // silent final ه
