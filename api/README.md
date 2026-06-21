@@ -168,6 +168,14 @@ For Heroku-style platforms there is a `Procfile` with a `web` and a `worker`
 process. The updater needs outbound access to the livescore feed
 (`web-api.varzesh3.com`) and to Polymarket (`gamma-api.polymarket.com`).
 
+### Free hosting (Fly.io + MongoDB Atlas)
+
+To run the full thing (API **and** live updater) for ~free, deploy to
+[Fly.io](https://fly.io) with a free [MongoDB Atlas](https://www.mongodb.com/atlas)
+database. A `Dockerfile`, `.dockerignore` and `fly.toml` are included here — one
+always-on machine runs both processes via PM2. Step-by-step guide:
+**[`docs/deploy-flyio.md`](../docs/deploy-flyio.md)**.
+
 ## Tests
 
 ```bash
