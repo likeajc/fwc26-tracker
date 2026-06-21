@@ -24,11 +24,12 @@ module.exports = {
       instances: 1,
       exec_mode: "fork",
       autorestart: true,
-      // The updater self-polls every POLL_INTERVAL ms; PM2 keeps it alive and
-      // restarts it (with a short backoff) if it ever crashes.
+      // The updater self-polls scores every POLL_INTERVAL ms and Polymarket
+      // odds every ODDS_POLL_INTERVAL ms; PM2 keeps it alive 24/7 and restarts
+      // it (with a short backoff) if it ever crashes.
       restart_delay: 5000,
       max_memory_restart: "300M",
-      env: { NODE_ENV: "production", POLL_INTERVAL: "3000" },
+      env: { NODE_ENV: "production", POLL_INTERVAL: "3000", ODDS_POLL_INTERVAL: "60000" },
     },
   ],
 };

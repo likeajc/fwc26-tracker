@@ -278,9 +278,11 @@ is different from the tournament-winner market above. Verified live 2026-06-21:
   - `"<Away>"` → "Will \<Away\> win on \<date\>?"
   - `"Draw (<Home> vs. <Away>)"` → "Will … end in a draw?"
 - Each market's **Yes price** (`outcomePrices[0]`) is that outcome's implied
-  probability. With neg-risk the three sum to ~1.0, so normalize to clean
-  percentages. Example — *Tunisia vs. Japan* (`fifwc-tun-jpn-2026-06-21`):
-  Japan 67.5% / Draw 20.5% / Tunisia 11.5% (raw Yes summed to 0.995).
+  probability. With neg-risk the three sum to ~1.0; normalize and (for display)
+  round to whole-number percentages that sum to exactly 100 via the
+  largest-remainder method. Example — *Tunisia vs. Japan*
+  (`fifwc-tun-jpn-2026-06-21`): raw Yes 0.675 / 0.205 / 0.115 (sum 0.995) →
+  Japan 69% / Draw 20% / Tunisia 11%.
 
 **List all match events:** `GET /events?tag_id=102232&closed=false&limit=100`
 (paginate via `offset`), then keep events with exactly 3 markets and a `" vs"`
