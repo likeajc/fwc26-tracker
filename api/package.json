@@ -79,6 +79,10 @@
     {
       "name": "OpenAI Codex",
       "url": "https://openai.com/codex"
+    },
+    {
+      "name": "Claude Code",
+      "url": "https://www.anthropic.com/claude-code"
     }
   ]
 }

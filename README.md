@@ -47,3 +47,4 @@ worked examples of every endpoint, including the odds.
 ## Contributors
 
 - OpenAI Codex — contributor and co-author for AI-assisted maintenance work.
+- Claude Code — contributor for AI-assisted maintenance work.
