@@ -1,0 +1,14 @@
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "'/Users/joaomartins/Code/fwc2026/.codex/hooks/session-start.sh'"
+          }
+        ]
+      }
+    ]
+  }
+}
